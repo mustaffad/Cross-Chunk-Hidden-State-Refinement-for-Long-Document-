@@ -1,10 +1,6 @@
 from pathlib import Path
 import torch
 
-MODEL_DIR_4B  = "/home/mustafa-dursunoglu/models/gemma-2-2b-it"
-MODEL_FILE_4B = "gemma-2-2b-it-Q4_K_M.gguf"
-MODEL_DIR_27B  = "/home/mustafa-dursunoglu/models/gemma-3-27b"
-MODEL_FILE_27B = "google_gemma-3-27b-it-Q4_K_M.gguf"
 
 def compute_chunk_params(num_tokens: int, max_ctx: int) -> dict:
     TARGET_CHUNKS       = 25    

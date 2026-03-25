@@ -3,12 +3,12 @@ import pickle
 from pathlib import Path
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from config import MODEL_DIR_4B, MODEL_FILE_4B, DTYPE, DEVICE, CACHE_DIR, compute_chunk_params
+from config import DTYPE, DEVICE, CACHE_DIR, compute_chunk_params
 
 
 
-def load_model_and_tokenizer(model_dir=None):
-    mdir = Path(model_dir) if model_dir else Path(MODEL_DIR_4B)
+def load_model_and_tokenizer(model_dir):
+    mdir = Path(model_dir)
     gguf_files = list(mdir.glob("*.gguf"))
     if not gguf_files:
         raise FileNotFoundError(f"No .gguf file found in {mdir}")
