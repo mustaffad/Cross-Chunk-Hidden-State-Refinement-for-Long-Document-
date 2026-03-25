@@ -29,7 +29,7 @@ def _select_top_k_chunks(model, tokenizer, question, all_hidden_states, refined_
 
 
 def answer_question(model, tokenizer, chunks, all_hidden_states, refined_hidden_states, question, top_k):
-    k = max(top_k, 5)
+    k = max(top_k, 7)
     top_indices = _select_top_k_chunks(
         model, tokenizer, question, all_hidden_states, refined_hidden_states, k=k
     )
@@ -37,11 +37,12 @@ def answer_question(model, tokenizer, chunks, all_hidden_states, refined_hidden_
         tokenizer.decode(chunks[i], skip_special_tokens=True) for i in top_indices
     )
     content = (
-        f"Here are relevant sections of a document:\n\n{selected_text}\n\n"
-        f"Answer the following question using ONLY information explicitly stated in the text above. "
-        f"Be specific and refer to details from the text. "
-        f"Do not add any information that is not in the provided sections.\n\n"
-        f"Question: {question}"
+        f"Document excerpts:\n\n{selected_text}\n\n"
+        f"Using only the exact words and details from the excerpts above, "
+        f"answer the following question in one or two sentences. "
+        f"Do not guess or add anything not stated in the text.\n\n"
+        f"Question: {question}\n"
+        f"Answer:"
     )
     messages = [{"role": "user", "content": content}]
     input_ids = tokenizer.apply_chat_template(
@@ -53,7 +54,7 @@ def answer_question(model, tokenizer, chunks, all_hidden_states, refined_hidden_
         output_ids = model.generate(
             input_ids,
             attention_mask=attention_mask,
-            max_new_tokens=300,
+            max_new_tokens=150,
             do_sample=False,
             pad_token_id=tokenizer.eos_token_id,
         )
