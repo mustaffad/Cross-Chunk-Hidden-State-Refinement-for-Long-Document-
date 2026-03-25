@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+
+# Model cache (generated at runtime)
+cache/
+*.pkl
+
+# Data documents (users supply their own)
+data/
+
+# Research/benchmark files (not part of the public interface)
+phase4_benchmark.py
+pipeline.py
+report.tex
+structure.txt
