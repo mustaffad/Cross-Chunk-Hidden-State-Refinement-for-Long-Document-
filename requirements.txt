@@ -2,3 +2,4 @@ torch>=2.2.0
 transformers>=4.40.0
 accelerate>=0.28.0
 sentencepiece
+gguf>=0.10.0
