@@ -117,7 +117,7 @@ requirements.txt  # Python dependencies
 
 ---
 
-## Citation / Acknowledgement
+## Citation
 
-Built as an undergraduate research project (COMP 4900A).
+Built as an undergraduate research project (COMP 4900A). If you use this project in your work, please make sure to cite it properly.
 Model: [Gemma 2](https://arxiv.org/abs/2408.00118) by Google DeepMind.

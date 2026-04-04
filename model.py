@@ -9,19 +9,24 @@ from config import DEVICE
 
 
 def _select_top_k_chunks(model, tokenizer, question, all_hidden_states, refined_hidden_states, k):
+    # Encode question into query representation q
     q_ids = tokenizer.encode(question, add_special_tokens=False, return_tensors="pt").to(DEVICE)
     with torch.no_grad():
         out = model.model(q_ids, output_hidden_states=True)
         q_emb = out.hidden_states[-1][:, -1, :]
+    #norm(q)
     q_emb = F.normalize(q_emb.float(), dim=-1)
 
     similarities = []
     for H, H_star in zip(all_hidden_states, refined_hidden_states):
+        # ek = norm(mean(Hk)), ek* = norm(mean(Hk*))
         emb_h     = F.normalize(H.to(DEVICE).float().mean(dim=1),      dim=-1)
         emb_hstar = F.normalize(H_star.to(DEVICE).float().mean(dim=1), dim=-1)
+        # sk = (q · ek + q · ek*) / 2
         sim = ((q_emb * emb_h).sum() + (q_emb * emb_hstar).sum()).item() / 2
         similarities.append(sim)
 
+    # Select top-k chunks, re-ordered by original document position
     top_indices = sorted(
         sorted(range(len(similarities)), key=lambda i: similarities[i], reverse=True)[:k]
     )

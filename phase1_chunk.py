@@ -33,10 +33,12 @@ def load_model_and_tokenizer(model_dir):
 def chunk_tokens(token_ids, chunk_size, overlap):
     chunks = []
     chunk_starts = []
+    #divide overlapping chunks
     stride = chunk_size - overlap
     start = 0
     while start < len(token_ids):
         end = min(start + chunk_size, len(token_ids))
+        #define Ck
         chunks.append(token_ids[start:end])
         chunk_starts.append(start)
         if end == len(token_ids):

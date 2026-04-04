@@ -18,10 +18,10 @@ def repeat_kv(x, num_reps):
 # My Algorithm
 def cross_chunk_attention(H_i, H_j, attn_module, layernorm, num_heads, num_kv_heads, head_dim):
     hidden_size = num_heads * head_dim
-
+    
+    #Create layer norm and use it
     H_i_norm = layernorm(H_i)   
     H_j_norm = layernorm(H_j)   
-    
     Q = attn_module.q_proj(H_i_norm)   
     K = attn_module.k_proj(H_j_norm)   
     V = attn_module.v_proj(H_j_norm)   
@@ -36,7 +36,7 @@ def cross_chunk_attention(H_i, H_j, attn_module, layernorm, num_heads, num_kv_he
     num_reps = num_heads // num_kv_heads
     K = repeat_kv(K, num_reps)   
     V = repeat_kv(V, num_reps)   
-
+    #Cross attention contribtution
     scale = math.sqrt(head_dim)
     attn_weights = torch.matmul(Q, K.transpose(-2, -1)) / scale   
     attn_weights = F.softmax(attn_weights, dim=-1)
@@ -44,7 +44,7 @@ def cross_chunk_attention(H_i, H_j, attn_module, layernorm, num_heads, num_kv_he
     attn_output = torch.matmul(attn_weights, V)   
 
     attn_output = attn_output.transpose(1, 2).contiguous().view(1, seq_i, hidden_size)
-
+    #output projection
     attn_output = attn_module.o_proj(attn_output)  
 
     return attn_output
