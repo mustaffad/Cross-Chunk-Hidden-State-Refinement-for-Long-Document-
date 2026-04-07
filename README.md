@@ -1,12 +1,12 @@
 # Cross-Chunk Hidden State Refinement for Long-Document Q&A
 
-A training-free pipeline that enables small language models (Gemma 2B) to answer questions over documents that exceed their context window — without fine-tuning or an external embedding model.
+A training-free pipeline that enables small language models (Gemma 2B) to answer questions over documents that exceed their context window, without fine-tuning or an external embedding model.
 
 ## How It Works
 
-1. **Phase 1** — The document is split into overlapping chunks. Each chunk is encoded independently to produce hidden states and KV-caches.
-2. **Phase 2** — Cross-chunk attention refinement: each chunk's hidden states are enriched with attention contributions from every other chunk using the model's own frozen weights (no RoPE, no training).
-3. **Query** — At question time, the top-K most relevant chunks are retrieved via cosine similarity over an ensemble of raw and refined hidden states, then fed to the model for generation.
+1. **Phase 1**: The document is split into overlapping chunks. Each chunk is encoded independently to produce hidden states and KV-caches.
+2. **Phase 2**: Cross-chunk attention refinement: each chunk's hidden states are enriched with attention contributions from every other chunk using the model's own frozen weights (no RoPE, no training).
+3. **Query**: At question time, the top-K most relevant chunks are retrieved via cosine similarity over an ensemble of raw and refined hidden states, then fed to the model for generation.
 
 Phases 1 and 2 run once and are cached. Subsequent queries are answered instantly from the cache.
 
@@ -31,21 +31,21 @@ pip install -r requirements.txt
 
 A CUDA-capable GPU is strongly recommended. CPU inference works but will be slow.
 
-### Model — Gemma 2B IT (GGUF)
+### Model - Gemma 2B IT (GGUF)
 
 This project uses **Gemma 2 2B Instruct** in GGUF quantized format (`Q4_K_M`).
 
-#### Step 1 — Install the Hugging Face CLI
+#### Step 1: Install the Hugging Face CLI
 
 ```bash
 pip install huggingface_hub
 ```
 
-#### Step 2 — Accept the Gemma licence
+#### Step 2: Accept the Gemma licence
 
 Visit [https://huggingface.co/google/gemma-2-2b-it](https://huggingface.co/google/gemma-2-2b-it) and accept the model licence (requires a free Hugging Face account).
 
-#### Step 3 — Download the model files
+#### Step 3: Download the model files
 
 ```bash
 # Download tokenizer and config files
@@ -108,7 +108,7 @@ Type any natural-language question and press Enter. Type `quit` or `exit` (or pr
 ## Project Structure
 
 ```
-model.py          # Entry point — CLI + interactive Q&A loop
+model.py          # Entry point -> CLI + interactive Q&A loop
 phase1_chunk.py   # Phase 1: per-chunk encoding
 phase2_refine.py  # Phase 2: cross-chunk attention refinement
 config.py         # Chunk size, overlap, dtype, device settings
